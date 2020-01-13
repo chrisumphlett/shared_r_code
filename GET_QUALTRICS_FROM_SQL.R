@@ -1,4 +1,4 @@
-md1 <- "select * from dev.qualtrics.responses_metadata"
+md1 <- "select * from dev.qualtrics.response_metadata"
 md2 <- "select * from dev.qualtrics.question_metadata"
 md3 <- "select * from dev.qualtrics.survey_metadata"
 resp_md <- query_sql_server(db_server, db_name, md1)
@@ -9,7 +9,14 @@ rm(md1, md2, md3)
 
 
 get_survey_resp <- function(survey_id) {
+  resp_md2 <- resp_md %>%
+    select(response_id, startdate)
+  question_md2 <- question_md %>%
+    select(question_name, survey_id, question_text, question_type, response_type)
   resp_qry <- paste0("select * from dev.qualtrics.", survey_id)
-  survey_resp <- query_sql_server(db_server, db_name, resp_qry)
+  survey_resp <- query_sql_server(db_server, db_name, resp_qry) %>%
+    mutate(question_name = word(question_id, sep = fixed("_"))) %>%
+    left_join(resp_md2) %>%
+    left_join(question_md2)
   return(survey_resp)
 }
