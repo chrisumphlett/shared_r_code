@@ -18,6 +18,7 @@ get_survey_resp <- function(survey_id) {
     mutate(question_name = word(question_id, sep = fixed("_"))) %>%
     left_join(resp_md2) %>%
     left_join(question_md2) %>%
-    mutate(survey_start_dt = as.POSIXct(startdate))
+    mutate(survey_start_dt = as.POSIXct(startdate)) %>%
+    select(-startdate)
   return(survey_resp)
 }
