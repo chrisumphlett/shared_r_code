@@ -12,7 +12,8 @@ get_survey_resp <- function(survey_id) {
   resp_md2 <- resp_md %>%
     select(response_id, startdate)
   question_md2 <- question_md %>%
-    select(question_name, survey_id, question_text, question_type, response_type)
+    select(question_name, survey_id, question_text, question_type, response_type) %>%
+    distinct()
   resp_qry <- paste0("select * from dev.qualtrics.", survey_id)
   survey_resp <- query_sql_server(db_server, db_name, resp_qry) %>%
     mutate(question_name = word(question_id, sep = fixed("_"))) %>%
