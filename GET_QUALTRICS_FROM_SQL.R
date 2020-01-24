@@ -7,6 +7,7 @@ survey_md <- query_sql_server(db_server, db_name, md3)
 
 rm(md1, md2, md3)
 
+col_name_length <- 64
 
 get_survey_resp <- function(chosen_survey_id) {
   resp_md2 <- resp_md %>%
@@ -61,6 +62,7 @@ prep_response_data <- function(chosen_survey_id) {
     select(response_id, new_name, response) %>%
     pivot_wider(names_from = new_name, values_from = response) %>%
     janitor::clean_names()
+  names(single_resp2) <- substr(names(single_resp2), 1, col_name_length)
     
   mult_resp <- survey_resp2 %>%
     filter(question_type %in% c("MC") & response_type %in% c("MAVR", "MAHR", "MACOL") & str_detect(question_id, "_TEXT") == FALSE) 
@@ -72,6 +74,7 @@ prep_response_data <- function(chosen_survey_id) {
     select(response_id, new_name, response2) %>%
     pivot_wider(names_from = new_name, values_from = response2) %>%
     janitor::clean_names()
+  names(mult_resp2) <- substr(names(mult_resp2), 1, col_name_length)
   
   verbatim_resp <- survey_resp2 %>%
     filter(question_type %in% c("TE") | str_detect(question_id, "_TEXT") == TRUE)
@@ -80,6 +83,7 @@ prep_response_data <- function(chosen_survey_id) {
     select(response_id, new_name, response) %>%
     pivot_wider(names_from = new_name, values_from = response) %>%
     janitor::clean_names()
+  names(verbatim_resp2) <- substr(names(verbatim_resp2), 1, col_name_length)
   
   # these are not friendly to what we have in our architecture... don't have the question text. 
   ## they are "nested" in that there are multiple questions listed under a single header
@@ -93,6 +97,7 @@ prep_response_data <- function(chosen_survey_id) {
     select(response_id, question_id, response) %>%
     pivot_wider(names_from = question_id, values_from = response) %>%
     janitor::clean_names()
+  names(nested_resp2) <- substr(names(nested_resp2), 1, col_name_length)
   
   # verify same # of rows
   samerows <- nrow(survey_resp2) == (nrow(single_resp) + nrow(mult_resp) + nrow(verbatim_resp) + nrow(nested_resp))
@@ -110,3 +115,5 @@ prep_response_data <- function(chosen_survey_id) {
 # 
 # # check for new question/response types
 # a<-as.data.frame(result_list[5])
+
+
