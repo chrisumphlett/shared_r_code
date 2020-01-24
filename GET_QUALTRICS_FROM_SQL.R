@@ -1,3 +1,6 @@
+# function that can be called to write a table to sql
+devtools::source_url("https://github.com/chrisumphlett/shared_r_code/blob/master/SQL_SERVER.R?raw=TRUE")
+
 md1 <- "select * from dev.qualtrics.response_metadata"
 md2 <- "select * from dev.qualtrics.question_metadata"
 md3 <- "select * from dev.qualtrics.survey_metadata"
