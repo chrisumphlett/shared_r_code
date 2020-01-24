@@ -1,6 +1,3 @@
-# function that can be called to write a table to sql
-devtools::source_url("https://github.com/chrisumphlett/shared_r_code/blob/master/SQL_SERVER.R?raw=TRUE")
-
 md1 <- "select * from dev.qualtrics.response_metadata"
 md2 <- "select * from dev.qualtrics.question_metadata"
 md3 <- "select * from dev.qualtrics.survey_metadata"
@@ -110,12 +107,6 @@ prep_response_data <- function(chosen_survey_id) {
   return(result_list)
 }
 
-result_list <- prep_response_data(survey_id) 
-
-single_resp <- as.data.frame(result_list[1])
-mult_resp <- as.data.frame(result_list[2])
-verbatim_resp <- as.data.frame(result_list[3])
-nested_resp <- as.data.frame(result_list[4])
-
-# check for new question/response types
-a<-as.data.frame(result_list[5])
+# 
+# # check for new question/response types
+# a<-as.data.frame(result_list[5])
